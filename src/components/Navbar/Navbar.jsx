@@ -73,14 +73,14 @@ const Navbar = ({ bgColor, textColor }) => {
             <NavbarItem>
               <StyledLink to="/">Home</StyledLink>
             </NavbarItem> 
-            <NavbarItem>
+            {/* <NavbarItem>
               <StyledLink to="/movie/create">Add Movie</StyledLink>
-            </NavbarItem>
+            </NavbarItem> */}
             <NavbarItem>
               <StyledLink to="/movie/popular">Popular</StyledLink>
             </NavbarItem>
             <NavbarItem>
-              <StyledLink to="/movie/now">Now Playing</StyledLink>
+              <StyledLink to="/movie/now_playing">Now Playing</StyledLink>
             </NavbarItem>
             <NavbarItem>
               <StyledLink to="/movie/top">Top Rated</StyledLink>  

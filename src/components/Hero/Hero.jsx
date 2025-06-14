@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Button from '../ui/Button';
+import axios from 'axios';
 
 const Container = styled.div`
   margin: 1rem;
@@ -73,31 +74,55 @@ const HeroImage = styled.img`
 
 const Hero = () => {
   const [movie, setMovie] = useState({});
+  const [genres,setGenres]=useState(null);
+  const [idTrailer,setIdTrailer]=useState(null);
+  const API_KEY=import.meta.env.VITE_API_KEY;
+  // const genres=movie && movie.genres.mao((genre) => genre.name).join(', ');
+  // const idTrailer=movie && movie.videos.results[0].key;
+
 
   useEffect(() => {
-    async function fetchMovie() {
-      const url = 'https://www.omdbapi.com/?apikey=cf4d6b5e&i=tt2975590&plot=full';
-      const response = await fetch(url);
-      const data = await response.json();
-      setMovie(data);
+    async function fetchTrendingMovie() {
+      const url = `https://api.themoviedb.org/3/trending/movie/day?api_key=${API_KEY}`;
+      const response = await axios(url);
+      const firstMovie = response.data.results[0];
+      return firstMovie;
     }
-    fetchMovie();
+
+    async function fetchDetailMovie(){
+      const trendingMovie=await fetchTrendingMovie();
+      const id=trendingMovie.id;
+
+      const params=`?api_key=${API_KEY}&append_to_response=videos`;
+      const URL=`https://api.themoviedb.org/3/movie/${id}${params}`;
+      const response=await axios(URL);
+      console.log(response);
+      const dataGenres=response && response.data.genres.map((genre) => genre.name).join(', ');
+      const dataIdTrailer=response && response.data.videos.results[0].key;
+      setGenres(dataGenres);
+      setIdTrailer(dataIdTrailer);
+
+
+      setMovie(response.data);
+    }
+
+    fetchDetailMovie();
   }, []);
 
   return (
     <Container>
       <HeroSection>
         <HeroLeft>
-          <HeroTitle>{movie.Title}</HeroTitle>
-          <HeroGenre>Genre: {movie.Genre}</HeroGenre>
-          <HeroDescription>{movie.Plot}</HeroDescription>
+          <HeroTitle>{movie.title}</HeroTitle>
+          <HeroGenre>Genre: {genres}</HeroGenre>
+          <HeroDescription>{movie.overview}</HeroDescription>
           {/* <HeroButton>Watch</HeroButton> */}
-          <Button size="md" variant="primary">
-       Watch
+          <Button size="md" variant="primary" as="a" href={`https://www.youtube.com/watch?v=${idTrailer}`} target="_blank">
+       Watch Movie
       </Button>
         </HeroLeft>
         <HeroRight>
-          <HeroImage src={movie.Poster} alt={movie.Title} />
+          <HeroImage src={`https://image.tmdb.org/t/p/w500/${movie.backdrop_path}`} alt={movie.title} />
         </HeroRight>
       </HeroSection>
     </Container>
