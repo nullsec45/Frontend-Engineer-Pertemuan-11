@@ -83,7 +83,7 @@ const Navbar = ({ bgColor, textColor }) => {
               <StyledLink to="/movie/now_playing">Now Playing</StyledLink>
             </NavbarItem>
             <NavbarItem>
-              <StyledLink to="/movie/top">Top Rated</StyledLink>  
+              <StyledLink to="/movie/top_rated">Top Rated</StyledLink>  
             </NavbarItem>              
           </NavbarList>
         </div>
